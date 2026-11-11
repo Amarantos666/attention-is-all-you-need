@@ -9,18 +9,18 @@ import { BOX_FACES, boxCorners, Cam, project, V3 } from "../lib/proj3d";
 import { C, MONO, PALETTE, SANS, glow, softGlow } from "../theme";
 
 /**
- * 06 Transformer（设计时长 12 秒）
+ * 06 Transformer（设计时长 13.5 秒）
  * A 0–2.6s   多头注意力：8 种颜色的光束同时扫过句子（示意）
  * B 2.6–4.6s 位置编码：正弦波流过每个词，盖上"第几个"的印记
  * C 4.6–8.0s 组装一个积木块：注意力 → 残差+层归一化 → 前馈网络 → 残差+层归一化
- * D 8.0–12s  6 块堆成左右两座塔（编码器 / 解码器），镜头环绕上升；GPT 只用右塔并堆得更高
+ * D 8.0–13.5s 6 块堆成左右两座塔（编码器 / 解码器），镜头环绕上升；GPT 只用右塔并堆得更高
  */
 /** 震撼段（设计秒）：调整时长时保持原速 */
 export const KEEP: [number, number][] = [
   [0.25, 1.35],
   [8.0, 9.6],
 ];
-export const DESIGN = 12;
+export const DESIGN = 13.5;
 
 const T_POS = 2.6;
 const T_BLOCK = 4.6;
@@ -280,12 +280,12 @@ const TX = 250;
 
 const camAt = (t: number): Cam => {
   const k = prog(t, T_TOWER, 3.0, Ease.inOutCubic);
-  const g = prog(t, T_GPT, 1.6, Ease.inOutCubic);
+  const g = prog(t, T_GPT, 2.6, Ease.inOutSine);
   return {
     target: [lerp(0, TX, g), lerp(-150, -420, k) + lerp(0, -380, g), 0],
     yaw: lerp(-0.75, 0.45, k) + (t - T_TOWER) * 0.04,
     pitch: lerp(0.45, 0.18, k),
-    dist: lerp(1250, 1380, k) + g * 700,
+    dist: lerp(1250, 1380, k) + g * 620,
     f: 1050,
     cx: 540,
     cy: 900,
@@ -298,13 +298,13 @@ const drawTowers = (ctx: CanvasRenderingContext2D, t: number) => {
   if (t < T_TOWER - 0.1) return;
   const cam = camAt(t);
   const appear = prog(t, T_TOWER - 0.1, 0.3);
-  const gpt = prog(t, T_GPT, 0.6);
+  const gpt = prog(t, T_GPT, 1.0);
   const boxes: BoxDraw[] = [];
   for (const side of [-1, 1]) {
-    const n = side < 0 ? 6 : 6 + Math.floor(prog(t, T_GPT + 0.3, 1.3, Ease.inCubic) * 10);
+    const n = side < 0 ? 6 : 6 + Math.floor(prog(t, T_GPT + 0.5, 2.0, Ease.linear) * 10);
     for (let i = 0; i < n; i++) {
       const at = T_TOWER + 0.05 + i * 0.16 + (side > 0 ? 0.08 : 0);
-      const drop = prog(t, i < 6 ? at : T_GPT + 0.3 + (i - 6) * 0.13, 0.3, Ease.outCubic);
+      const drop = prog(t, i < 6 ? at : T_GPT + 0.5 + (i - 6) * 0.2, 0.35, Ease.outCubic);
       if (drop <= 0) continue;
       const y = -i * GAP - (1 - drop) * 400;
       const color = side < 0 ? C.cyan : C.violet;

@@ -19,7 +19,7 @@ export const TIMELINE = {
   paper: 11.8, // 03 一篇论文
   attention: 17.6, // 04 注意力
   formula: 11.9, // 05 核心公式
-  transformer: 13.9, // 06 Transformer
+  transformer: 15.7, // 06 Transformer
   nextToken: 16.1, // 07 猜下一个词
   training: 23.4, // 08 怎么学会的
   scaling: 12, // 09 越大越强
