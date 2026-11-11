@@ -2,7 +2,7 @@
 
 从一个神经元讲到 ChatGPT，核心是论文《Attention Is All You Need》（2017）。
 
-- 规格：1080×1920 竖屏，60fps，约 173 秒
+- 规格：1080×1920 竖屏，60fps，173.4 秒
 - 配乐：秋成《We Never (Remix)（若如初见）》，约 112.8 BPM，画面按节拍卡点
 - 成片：`final/how-ai-works-1080x1920.mp4`（仓库里是无声版，配乐有版权不随仓库分发）；分段低清预览与关键帧在 `previews/`
 - 技术：Remotion 4 + React + TypeScript；3D 效果用纯数学透视投影（不依赖 WebGL），逐帧确定、可复现
