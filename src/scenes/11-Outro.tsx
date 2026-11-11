@@ -7,17 +7,18 @@ import { Ease, lerp, prog, rnd } from "../lib/anim";
 import { C, MONO, SANS, glow } from "../theme";
 
 /**
- * 收尾（设计时长 8 秒）
+ * 收尾（设计时长 9.5 秒）
  * A 0–5s  一棵发光的家族树从 Transformer 生长出来，枝叶铺满屏幕
- * B 5–8s  全部暗下，只留一行字 "Attention is all you need."，停留 2 秒后淡出
+ * B 5–9.5s 全部暗下，只留一行字 "Attention is all you need."，停留 2 秒后淡出
  */
 /** 震撼段（设计秒）：调整时长时保持原速（结尾的停留严格保持 2 秒） */
-export const KEEP: [number, number][] = [[5.0, 8.0]];
-export const DESIGN = 8;
+export const KEEP: [number, number][] = [[5.0, 9.5]];
+export const DESIGN = 9.5;
 
 const T_DARK = 5.0;
 const T_LINE = 5.5;
-const T_FADE = 7.6;
+// 整行在 5.5 + 26×0.035 + 0.45 ≈ 6.86 秒完全显示，停留 2 秒后淡出
+const T_FADE = 8.9;
 
 type Node = { id: string; name: string; year: string; x: number; y: number; parent?: string; color: string; hub?: boolean };
 const ROOT = { x: 540, y: 1330 };
@@ -163,7 +164,7 @@ const FinalLine: React.FC<{ t: number }> = ({ t }) => {
   if (t < T_LINE) return null;
   const text = "Attention is all you need.";
   const chars = Array.from(text);
-  const fadeOut = prog(t, T_FADE, 0.4, Ease.inQuad);
+  const fadeOut = prog(t, T_FADE, 0.5, Ease.inQuad);
   return (
     <div style={{ position: "absolute", top: 900, left: 0, right: 0, textAlign: "center", opacity: 1 - fadeOut }}>
       <div style={{ fontFamily: SANS, fontWeight: 900, fontSize: 74, color: C.white, letterSpacing: 1, textShadow: "0 0 18px rgba(170,220,255,0.8), 0 0 60px rgba(61,224,255,0.45)" }}>

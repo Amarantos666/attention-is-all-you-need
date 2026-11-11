@@ -24,7 +24,7 @@ export const TIMELINE = {
   training: 23.4, // 08 怎么学会的
   scaling: 13.8, // 09 越大越强
   chat: 13.1, // 10 会聊天了
-  outro: 9, // 收尾
+  outro: 10.5, // 收尾
 } as const;
 
 export type SceneKey = keyof typeof TIMELINE;
