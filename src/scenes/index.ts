@@ -7,6 +7,9 @@ import { Tokens, DESIGN as D02, KEEP as K02 } from "./02-Tokens";
 import { Paper, DESIGN as D03, KEEP as K03 } from "./03-Paper";
 import { Attention, DESIGN as D04, KEEP as K04 } from "./04-Attention";
 import { Formula05, DESIGN as D05, KEEP as K05 } from "./05-Formula";
+import { Transformer, DESIGN as D06, KEEP as K06 } from "./06-Transformer";
+import { NextToken, DESIGN as D07, KEEP as K07 } from "./07-NextToken";
+import { Training, DESIGN as D08, KEEP as K08 } from "./08-Training";
 
 export type SceneDef = {
   key: SceneKey;
@@ -29,4 +32,7 @@ export const SCENES: SceneDef[] = [
   { key: "paper", id: "S03-Paper", component: Paper, design: D03, keep: K03, chapter: "03 一篇论文" },
   { key: "attention", id: "S04-Attention", component: Attention, design: D04, keep: K04, chapter: "04 注意力" },
   { key: "formula", id: "S05-Formula", component: Formula05, design: D05, keep: K05, chapter: "05 核心公式" },
+  { key: "transformer", id: "S06-Transformer", component: Transformer, design: D06, keep: K06, chapter: "06 Transformer" },
+  { key: "nextToken", id: "S07-NextToken", component: NextToken, design: D07, keep: K07, chapter: "07 猜下一个词" },
+  { key: "training", id: "S08-Training", component: Training, design: D08, keep: K08, chapter: "08 怎么学会的" },
 ];

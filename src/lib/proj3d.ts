@@ -35,3 +35,19 @@ export const add = (a: V3, b: V3): V3 => [a[0] + b[0], a[1] + b[1], a[2] + b[2]]
 export const sub = (a: V3, b: V3): V3 => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
 export const scale = (a: V3, k: number): V3 => [a[0] * k, a[1] * k, a[2] * k];
 export const mix = (a: V3, b: V3, k: number): V3 => [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k];
+
+/** 长方体的 8 个角（中心 c，尺寸 w×h×d） */
+export const boxCorners = (c: V3, w: number, h: number, d: number): V3[] => {
+  const out: V3[] = [];
+  for (const dx of [-0.5, 0.5]) for (const dy of [-0.5, 0.5]) for (const dz of [-0.5, 0.5]) out.push([c[0] + dx * w, c[1] + dy * h, c[2] + dz * d]);
+  return out;
+};
+/** 6 个面（按角的索引） */
+export const BOX_FACES = [
+  [0, 1, 3, 2], // x-
+  [4, 5, 7, 6], // x+
+  [0, 1, 5, 4], // y-
+  [2, 3, 7, 6], // y+
+  [0, 2, 6, 4], // z-
+  [1, 3, 7, 5], // z+
+];
