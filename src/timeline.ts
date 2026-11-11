@@ -3,20 +3,22 @@
  *
  * 想按音乐节拍调整，只改下面的数字即可：
  *   - 每一幕会自动接在上一幕后面，总时长自动重新计算；
- *   - 每一幕内部的动画节奏会按比例伸缩（拉长就变慢，缩短就变快），
+ *   - 每一幕里标记为"震撼段"的瞬间（冲击、爆发、镜头急推急拉）始终保持原速；
+ *     其余讲解段自动伸缩来吸收差值（拉长就变慢，缩短就变快），
  *     所以不会出现动画被截断或末尾空等的情况。
+ *   - 震撼段的位置写在每个场景文件顶部的 KEEP 里。
  */
 export const FPS = 60;
 export const WIDTH = 1080;
 export const HEIGHT = 1920;
 
 export const TIMELINE = {
-  hook: 5, // 钩子
-  neuron: 12, // 01 神经元
-  tokens: 12, // 02 文字变数字
-  paper: 10, // 03 一篇论文
-  attention: 15, // 04 注意力
-  formula: 10, // 05 核心公式
+  hook: 5.4, // 钩子
+  neuron: 13.7, // 01 神经元
+  tokens: 14, // 02 文字变数字
+  paper: 11.8, // 03 一篇论文
+  attention: 17.6, // 04 注意力
+  formula: 11.9, // 05 核心公式
   transformer: 12, // 06 Transformer
   nextToken: 14, // 07 猜下一个词
   training: 20, // 08 怎么学会的

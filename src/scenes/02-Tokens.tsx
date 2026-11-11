@@ -16,6 +16,13 @@ import { C, MONO, SANS, glow, softGlow } from "../theme";
  * D 6.6–9.2s 词飞进 3D 星空，意思相近的词自动聚在一起
  * E 9.2–12s  经典示例：国王 − 男人 + 女人 ≈ 女王（word2vec，2013）
  */
+/** 震撼段（设计秒）：调整时长时保持原速 */
+export const KEEP: [number, number][] = [
+  [1.5, 2.05],
+  [2.7, 3.25],
+  [6.5, 7.3],
+  [10.8, 11.15],
+];
 export const DESIGN = 12;
 
 const T_SHATTER = 1.55;

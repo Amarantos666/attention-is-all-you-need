@@ -26,7 +26,7 @@ export const Video: React.FC = () => {
         const Comp = s.component;
         return (
           <Sequence key={s.key} from={s.from} durationInFrames={s.durationInFrames} name={s.id}>
-            <SceneShell design={s.design} durationInFrames={s.durationInFrames} chapter={s.chapter}>
+            <SceneShell design={s.design} durationInFrames={s.durationInFrames} keep={s.keep} chapter={s.chapter}>
               <Comp />
             </SceneShell>
           </Sequence>
@@ -41,7 +41,7 @@ export const SingleScene: React.FC<{ sceneKey: string }> = ({ sceneKey }) => {
   const s = getLayout().find((x) => x.key === sceneKey)!;
   const Comp = s.component;
   return (
-    <SceneShell design={s.design} durationInFrames={s.durationInFrames} chapter={s.chapter}>
+    <SceneShell design={s.design} durationInFrames={s.durationInFrames} keep={s.keep} chapter={s.chapter}>
       <Comp />
     </SceneShell>
   );

@@ -13,6 +13,11 @@ import { C, MONO, SANS, glow } from "../theme";
  * B 3.8–7.4s 推进到神经元内部：激活函数 ReLU（开关）
  * C 7.4–12s  镜头急速拉远：1 → 几百 → 几百万，连成网络；"这些权重，就是参数"
  */
+/** 震撼段（设计秒）：调整时长时保持原速 */
+export const KEEP: [number, number][] = [
+  [3.7, 4.35],
+  [7.3, 10.2],
+];
 export const DESIGN = 12;
 
 // —— 示例数值（真实可算）——

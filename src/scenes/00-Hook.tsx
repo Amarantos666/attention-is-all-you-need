@@ -11,6 +11,8 @@ import { C, MONO, SANS, softGlow } from "../theme";
  * 钩子（设计时长 5 秒）
  * "你和 AI 说的每一句话……" → "背后都是数学" → 数字洪流淹没屏幕 → 收缩成一个光点
  */
+/** 震撼段（设计秒）：调整时长时保持原速 */
+export const KEEP: [number, number][] = [[1.95, 5]];
 export const DESIGN = 5;
 
 const CX = 540;
