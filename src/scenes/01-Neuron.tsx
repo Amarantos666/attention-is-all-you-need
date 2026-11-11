@@ -468,6 +468,40 @@ const galEdges: [number, number][] = (() => {
   return edges;
 })();
 
+// 镜头拉得很远时，星系整体预渲染到一张离屏画布，之后每帧只做缩放 + 旋转（软件渲染下快几十倍）
+const S_REF = 0.025;
+const CW = 4200;
+const CH = 3400;
+let galCache: HTMLCanvasElement | null = null;
+const getGalCache = () => {
+  if (galCache) return galCache;
+  const c = document.createElement("canvas");
+  c.width = CW;
+  c.height = CH;
+  const g = c.getContext("2d")!;
+  g.globalCompositeOperation = "lighter";
+  g.strokeStyle = "rgba(110,140,255,0.11)";
+  g.lineWidth = 1.5;
+  g.beginPath();
+  let n = 0;
+  for (const [a, b] of galEdges) {
+    g.moveTo(CW / 2 + gal[a].x * S_REF, CH / 2 + gal[a].y * S_REF);
+    g.lineTo(CW / 2 + gal[b].x * S_REF, CH / 2 + gal[b].y * S_REF);
+    if (++n % 400 === 0) {
+      g.stroke();
+      g.beginPath();
+    }
+  }
+  g.stroke();
+  for (const p of gal) {
+    const r = 1.4 + p.b * 1.6;
+    g.fillStyle = p.c ? `rgba(190,140,255,${0.35 + p.b * 0.6})` : `rgba(90,230,255,${0.35 + p.b * 0.6})`;
+    g.fillRect(CW / 2 + p.x * S_REF - r, CH / 2 + p.y * S_REF - r, r * 2, r * 2);
+  }
+  galCache = c;
+  return c;
+};
+
 const S0 = 2.3; // 起始缩放：中心神经元与 A 段大小一致
 const S1 = 0.0105;
 const zoomAt = (t: number) => {
@@ -489,29 +523,69 @@ const drawNetwork = (ctx: CanvasRenderingContext2D, t: number) => {
 
   // —— 星系（远景）——
   const galA = prog(Math.log(1 / s), Math.log(1 / 0.6), 2.2, Ease.inOutSine);
-  if (galA > 0) {
+  if (galA > 0 && s <= S_REF) {
+    ctx.save();
+    ctx.globalAlpha = galA * (0.9 + 0.1 * Math.sin(t * 5));
+    ctx.translate(ANCHOR_X, ANCHOR_Y);
+    ctx.rotate(rot);
+    ctx.scale(s / S_REF, s / S_REF);
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(getGalCache(), -CW / 2, -CH / 2);
+    ctx.restore();
+  } else if (galA > 0) {
     const ea = Math.min(0.32, 0.03 + 3000 * s * 0.0002) * galA;
     ctx.strokeStyle = `rgba(110,140,255,${ea})`;
     ctx.lineWidth = Math.max(0.6, Math.min(2, 30 * s));
+    // 分块描边：超大的单条路径在软件渲染下非常慢
+    let count = 0;
     ctx.beginPath();
-    for (const [a, b] of galEdges) {
+    for (let ei = 0; ei < galEdges.length; ei += 2) {
+      const [a, b] = galEdges[ei];
       const pa = gal[a];
       const pb = gal[b];
       const ax = tx(pa);
       const ay = ty(pa);
-      if (ax < -200 || ax > 1280 || ay < -200 || ay > 2120) continue;
+      if (ax < -100 || ax > 1180 || ay < -100 || ay > 2020) continue;
       ctx.moveTo(ax, ay);
       ctx.lineTo(tx(pb), ty(pb));
+      if (++count % 400 === 0) {
+        ctx.stroke();
+        ctx.beginPath();
+      }
     }
     ctx.stroke();
     const pr = Math.max(1.2, Math.min(14, NODE_R * s * 1.8));
-    for (let i = 0; i < GAL_N; i++) {
-      const p = gal[i];
-      const x = tx(p);
-      const y = ty(p);
-      if (x < -20 || x > 1100 || y < -20 || y > 1940) continue;
-      const tw = 0.7 + 0.3 * Math.sin(t * 3 + i);
-      drawGlow(ctx, p.c ? "180,120,255" : "61,224,255", x, y, pr * (0.8 + p.b), galA * p.b * tw);
+    if (pr < 3.5) {
+      // 远处的小点：按颜色 × 亮度分组，批量填充
+      const LEVELS = 4;
+      for (let col = 0; col < 2; col++) {
+        for (let lv = 0; lv < LEVELS; lv++) {
+          ctx.beginPath();
+          for (let i = 0; i < GAL_N; i++) {
+            const p = gal[i];
+            if (p.c !== col) continue;
+            const tw = 0.7 + 0.3 * Math.sin(t * 3 + i);
+            const level = Math.min(LEVELS - 1, Math.floor(p.b * tw * LEVELS));
+            if (level !== lv) continue;
+            const x = tx(p);
+            const y = ty(p);
+            if (x < -5 || x > 1085 || y < -5 || y > 1925) continue;
+            const r = pr * (0.5 + p.b * 0.6);
+            ctx.rect(x - r, y - r, r * 2, r * 2);
+          }
+          ctx.fillStyle = col ? `rgba(190,140,255,${galA * (lv + 1) / LEVELS})` : `rgba(90,230,255,${galA * (lv + 1) / LEVELS})`;
+          ctx.fill();
+        }
+      }
+    } else {
+      for (let i = 0; i < GAL_N; i++) {
+        const p = gal[i];
+        const x = tx(p);
+        const y = ty(p);
+        if (x < -20 || x > 1100 || y < -20 || y > 1940) continue;
+        const tw = 0.7 + 0.3 * Math.sin(t * 3 + i);
+        drawGlow(ctx, p.c ? "180,120,255" : "61,224,255", x, y, pr * (0.8 + p.b), galA * p.b * tw);
+      }
     }
   }
 
