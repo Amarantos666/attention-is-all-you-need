@@ -331,13 +331,16 @@ const Title: React.FC<{ t: number }> = ({ t }) => {
             fontWeight: 500,
             fontSize: 32,
             color: "#FFE3A3",
-            padding: "12px 28px",
-            borderRadius: 40,
+            padding: "12px 30px",
+            borderRadius: 30,
+            lineHeight: 1.5,
             border: "2px solid rgba(255,201,77,0.6)",
             background: "rgba(40,30,10,0.55)",
           }}
         >
-          ♪ 彩蛋：标题致敬披头士《All You Need Is Love》
+          ♪ 彩蛋：作者 Llion Jones 说，
+          <br />
+          标题致敬了披头士的《All You Need Is Love》
         </span>
       </div>
     </AbsoluteFill>
