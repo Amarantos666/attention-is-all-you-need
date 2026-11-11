@@ -2,3 +2,6 @@ node_modules/
 out/
 .DS_Store
 *.log
+
+# 配乐（有版权，不提交；放到 public/bgm.mp3 即可带音乐渲染）
+public/bgm.mp3

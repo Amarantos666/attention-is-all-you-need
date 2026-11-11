@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo } from "react";
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
-import { makeWarp, Range } from "../lib/warp";
+import { makeWarp, Pin, Range } from "../lib/warp";
 import { C } from "../theme";
 import { ChapterTag } from "./ChapterTag";
 import { Grain } from "./Grain";
@@ -11,18 +11,21 @@ const SceneContext = createContext<Ctx>({ design: 1, warp: (s) => s });
 /**
  * 每一幕的外壳：
  *  - 提供"设计时间" t（秒）。每幕按 design 秒来编排动画，
- *    实际时长由 timeline.ts 决定：震撼段（keep）保持原速，其余讲解段自动伸缩。
+ *    实际时长由 timeline.ts 决定：震撼段（keep）保持原速，其余讲解段自动伸缩；
+ *    timeline.ts 里的 SYNC 可以把某个设计时刻钉在音乐的某一拍上。
  *  - 右上角章节标签、胶片颗粒。
  */
 export const SceneShell: React.FC<{
   design: number;
   durationInFrames: number;
   keep?: Range[];
+  /** 卡点钉：[设计秒, 本幕实际秒] */
+  pins?: Pin[];
   chapter?: string;
   children: React.ReactNode;
-}> = ({ design, durationInFrames, keep = [], chapter, children }) => {
+}> = ({ design, durationInFrames, keep = [], pins = [], chapter, children }) => {
   const { fps } = useVideoConfig();
-  const warp = useMemo(() => makeWarp(design, keep, durationInFrames / fps), [design, keep, durationInFrames, fps]);
+  const warp = useMemo(() => makeWarp(design, keep, durationInFrames / fps, pins), [design, keep, pins, durationInFrames, fps]);
   return (
     <SceneContext.Provider value={{ design, warp }}>
       <AbsoluteFill style={{ backgroundColor: C.bg, overflow: "hidden" }}>
