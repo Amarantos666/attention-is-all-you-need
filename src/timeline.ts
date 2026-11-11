@@ -22,9 +22,9 @@ export const TIMELINE = {
   transformer: 15.7, // 06 Transformer
   nextToken: 16.1, // 07 猜下一个词
   training: 23.4, // 08 怎么学会的
-  scaling: 12, // 09 越大越强
-  chat: 10, // 10 会聊天了
-  outro: 8, // 收尾
+  scaling: 13.8, // 09 越大越强
+  chat: 13.1, // 10 会聊天了
+  outro: 9, // 收尾
 } as const;
 
 export type SceneKey = keyof typeof TIMELINE;

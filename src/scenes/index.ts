@@ -10,6 +10,9 @@ import { Formula05, DESIGN as D05, KEEP as K05 } from "./05-Formula";
 import { Transformer, DESIGN as D06, KEEP as K06 } from "./06-Transformer";
 import { NextToken, DESIGN as D07, KEEP as K07 } from "./07-NextToken";
 import { Training, DESIGN as D08, KEEP as K08 } from "./08-Training";
+import { Scaling, DESIGN as D09, KEEP as K09 } from "./09-Scaling";
+import { Chat, DESIGN as D10, KEEP as K10 } from "./10-Chat";
+import { Outro, DESIGN as D11, KEEP as K11 } from "./11-Outro";
 
 export type SceneDef = {
   key: SceneKey;
@@ -35,4 +38,7 @@ export const SCENES: SceneDef[] = [
   { key: "transformer", id: "S06-Transformer", component: Transformer, design: D06, keep: K06, chapter: "06 Transformer" },
   { key: "nextToken", id: "S07-NextToken", component: NextToken, design: D07, keep: K07, chapter: "07 猜下一个词" },
   { key: "training", id: "S08-Training", component: Training, design: D08, keep: K08, chapter: "08 怎么学会的" },
+  { key: "scaling", id: "S09-Scaling", component: Scaling, design: D09, keep: K09, chapter: "09 越大越强" },
+  { key: "chat", id: "S10-Chat", component: Chat, design: D10, keep: K10, chapter: "10 会聊天了" },
+  { key: "outro", id: "S11-Outro", component: Outro, design: D11, keep: K11 },
 ];
